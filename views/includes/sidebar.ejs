@@ -1,0 +1,61 @@
+
+<div class="sidebar" data-color="black" id="sugarizer-sidebar">
+
+	<div class="logo">
+		<div class="simple-text">Sugarizer School Portal</div>
+		<div class="server-description">Super Admin Console</div>
+	</div>
+
+	<div class="sidebar-wrapper">
+		<ul class="nav">
+			<li>
+				<a class="pointer hide-desk-el" onclick="jumpTo('/dashboard/logout')">
+					<i class="custom-icon shutdown-icon"></i>
+					<p data-l10n-id="logout">Logout</p>
+			  	</a>
+			</li>
+
+			<%if (module == 'Deployments') { %>
+				<li class="active">
+			<% } else {%>
+				<li>
+			<% }%>
+				<a class="pointer" href="/deployments">
+					<i class="custom-icon home-icon"></i>
+					<p>Deployments</p>
+				</a>
+			</li>
+			<%if (module == 'Requests') { %>
+				<li class="active">
+			<% } else {%>
+				<li>
+			<% }%>
+				<a class="pointer" href="/requests">
+					<i class="custom-icon activity-icon"></i>
+					<p>Requests</p>
+				</a>
+			</li>
+			<%if (module == 'Deployment Monitor') { %>
+				<li class="active">
+			<% } else {%>
+				<li>
+			<% }%>
+				<a class="pointer" href="/deploymentMonitor">
+					<i class="custom-icon journal-icon"></i>
+					<p>Deployment Monitor</p>
+				</a>
+			</li>
+			<%if (module == 'Cluster Monitor') { %>
+				<li class="active">
+			<% } else {%>
+				<li>
+			<% }%>
+				<a class="pointer" href="/clusterMonitor">
+					<i class="custom-icon classroom-icon"></i>
+					<p>Cluster Monitor</p>
+				</a>
+			</li>
+			
+		</ul>
+	</div>
+</div>

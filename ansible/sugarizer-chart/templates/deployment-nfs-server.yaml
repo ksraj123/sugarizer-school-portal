@@ -1,0 +1,38 @@
+# before executing this make a persistent disk with the following command
+# gcloud compute disks create --size=10GB --zone=us-east1-b gce-nfs-disk
+# we will make all of this for each namespace
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: nfs-server
+  namespace: {{.Values.school.Id}}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      role: nfs-server
+  template:
+    metadata:
+      labels:
+        role: nfs-server
+    spec:
+      containers:
+      - name: nfs-server
+        image: gcr.io/google_containers/volume-nfs:0.8
+        ports:
+          - name: nfs
+            containerPort: 2049
+          - name: mountd
+            containerPort: 20048
+          - name: rpcbind
+            containerPort: 111
+        securityContext:
+          privileged: true
+        volumeMounts:
+          - mountPath: /exports
+            name: mypvc
+      volumes:
+        - name: mypvc
+          gcePersistentDisk:
+            pdName: {{.Values.school.Id}} #replace this with the name of your gce persistent disk
+            fsType: ext4

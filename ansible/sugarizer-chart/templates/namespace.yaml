@@ -1,0 +1,6 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: {{.Values.school.Id}}
+  labels:
+    name: {{.Values.school.Id}}

@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: school-deployment
+  namespace: {{.Values.school.Id}}
+spec:
+  replicas: {{ .Values.server.replicas }}
+  selector:
+    matchLabels:
+        app: {{ template "sugarizer-chart.fullname" . }}-pod
+  template:
+    metadata:
+        labels:
+          app: {{ template "sugarizer-chart.fullname" . }}-pod
+          school: {{.Values.school.Id}}
+    spec:
+      volumes:
+        - name: my-pvc-nfs
+          persistentVolumeClaim:
+            claimName: nfs
+      containers:
+      - name: sugarizer-server
+        image: {{ .Values.server.image }}
+        volumeMounts:
+        - name: my-pvc-nfs
+          mountPath: /sugarizer-server
+          subPath: sugarizer-server
+        - name: my-pvc-nfs
+          mountPath: /sugarizer-client
+          subPath: sugarizer-client
+        command: ["/bin/sh", "-c"]
+        args: 
+        - apt-get update; apt-get install sudo; sudo apt install git -y;
+          {{ .Values.client.setupCommands }}
+          {{ .Values.server.setupCommands }}
+          sh ./add-admin.sh admin password http://127.0.0.1:80/auth/signup;
+        env:
+        - name: NODE_ENV
+          value: docker
+        - name: MONGO_URL
+          value: mongodb://{{ template "mongodb.fullname" . }}-service.{{.Values.school.Id}}.svc.cluster.local:{{ .Values.database.port }}/
+        ports:
+        - containerPort: {{ .Values.server.httpPortPod }}
+          name: http
+        - containerPort: {{ .Values.server.presencePort }}
+          name: presence

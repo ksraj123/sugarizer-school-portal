@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "mongodb.fullname" . }}-deployment
+  namespace: {{.Values.school.Id}}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ template "mongodb.fullname" . }}-pod
+  template:
+    metadata:
+      labels:
+        app: {{ template "mongodb.fullname" . }}-pod
+    spec:
+      volumes:
+        - name: my-pvc-nfs
+          persistentVolumeClaim:
+            claimName: nfs
+      containers:
+      - name: mongodb
+        image: {{ .Values.database.image }}
+        volumeMounts:
+        - name: my-pvc-nfs
+          mountPath: /data/db
+          subPath: sugarizer-server/docker/db
+        command: ["/bin/sh", "-c"]
+        args: ["mongod --repair; mongod"]
+        env:
+        - name: AUTH
+          value: "no"
+        ports:
+        - name: mongodb
+          containerPort: {{ .Values.database.port }}
+          hostPort: {{ .Values.database.port }}
+          protocol: TCP

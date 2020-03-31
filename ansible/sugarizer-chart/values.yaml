@@ -1,0 +1,22 @@
+database:
+  image: mikkl/multiarch-mongodb:amd64
+  port: 27017
+
+# sugarizer-server settings
+server:
+  image: llaske/multiarch-node6:amd64
+  replicas: 1
+  serviceType: LoadBalancer
+  httpPortPod: 80
+  httpPortExternal: 8080
+  presencePort: 8039
+  setupCommands: " cd sugarizer-server; git init;
+          git remote add origin https://github.com/ksraj123/sugarizer-server.git;
+          git fetch origin master; git pull origin master; npm install;
+          node /sugarizer-server/sugarizer.js /sugarizer-server/env/docker.ini;"
+
+# sugarizer-client settings
+client:
+  setupCommands: "cd sugarizer-client; git init;
+          git remote add origin https://github.com/llaske/sugarizer;
+          git fetch origin master; git pull origin master; cd ..;"

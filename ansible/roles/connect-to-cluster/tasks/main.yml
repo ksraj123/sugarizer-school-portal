@@ -1,0 +1,2 @@
+- name: connecting to kubernetes cluster
+  shell: gcloud container clusters get-credentials {{cluster_name}} --zone {{zone}} --project {{project}}

@@ -1,0 +1,11 @@
+- hosts: localhost
+  tasks:
+   - name: connecting to cluster
+     shell: gcloud container clusters get-credentials {{cluster_name}} --zone {{zone}} --project {{project}}
+   - name: scaling the deployment
+     shell: kubectl get service {{schoolId}}-service --namespace={{schoolId}} -o json
+     register: json
+   - set_fact:
+      marker: $marker$
+   - debug:
+      var: json
