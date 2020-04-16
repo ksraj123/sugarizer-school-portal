@@ -8,7 +8,7 @@ spec:
   accessModes:
     - ReadWriteMany
   nfs:
-    server: nfs-server.{{.Values.school.Id}}.svc.cluster.local #cluster ip of nfs-service or <service-name>.<namespace>.svc.cluster.local
+    server: nfs-server.{{.Values.school.Id}}.svc.cluster.local
     path: "/"
 
 ---

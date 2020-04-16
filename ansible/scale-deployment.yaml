@@ -1,9 +1,7 @@
+# Ansible/scale-deployment.yaml
 - hosts: localhost
   tasks:
    - name: connecting to cluster
      shell: gcloud container clusters get-credentials {{cluster_name}} --zone {{zone}} --project {{project}}
    - name: scaling the deployment
-     shell: kubectl get service {{schoolId}}-service --namespace={{schoolId}} -o json
-     register: json
-   - debug:
-      var: json
+     shell: helm upgrade {{schoolId}} ./sugarizer-chart --set server.replicas={{scale}},school.Id={{schoolId}}

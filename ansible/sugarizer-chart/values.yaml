@@ -5,15 +5,16 @@ database:
 # sugarizer-server settings
 server:
   image: llaske/multiarch-node6:amd64
-  replicas: 1
+  replicas: 3
   serviceType: LoadBalancer
   httpPortPod: 80
   httpPortExternal: 8080
   presencePort: 8039
   setupCommands: " cd sugarizer-server; git init;
           git remote add origin https://github.com/ksraj123/sugarizer-server.git;
-          git fetch origin master; git pull origin master; npm install;
-          node /sugarizer-server/sugarizer.js /sugarizer-server/env/docker.ini;"
+          git fetch origin sessionFix; git pull origin sessionFix; git checkout sessionFix;
+          npm install;
+          nohup node /sugarizer-server/sugarizer.js /sugarizer-server/env/docker.ini & (sleep 100s && (sh add-admin.sh defaultuser password http://127.0.0.1:80/auth/signup && sleep infinity))"
 
 # sugarizer-client settings
 client:

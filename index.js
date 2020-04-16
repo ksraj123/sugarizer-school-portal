@@ -53,6 +53,10 @@ app.get('/requests', (req, res)=>{
     })
 })
 
+app.get('/', (req, res)=>{
+    res.send('<h1>Hola!!!</h1>');
+})
+
 app.get('/getTodos', (req, res)=>{
     db.getDB().collection(collection).find({}).toArray((err, documents)=>{
         if (err)
@@ -83,10 +87,11 @@ app.get('/getExternal', (req, res)=>{
 db.connect((err)=>{
     if(err){
         console.log("Unable to connect to database");
+        console.log(err);
         process.exit(1); // if unable to connect then the application exits, this should not be the case in kubernetes
     }
     else{
-        app.listen(3000, ()=>{
+        app.listen(8080, ()=>{
             console.log("connected to db, app listening on port 3000");
         })
     }

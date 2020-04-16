@@ -33,12 +33,11 @@ spec:
         - apt-get update; apt-get install sudo; sudo apt install git -y;
           {{ .Values.client.setupCommands }}
           {{ .Values.server.setupCommands }}
-          sh ./add-admin.sh admin password http://127.0.0.1:80/auth/signup;
         env:
         - name: NODE_ENV
           value: docker
         - name: MONGO_URL
-          value: mongodb://{{ template "mongodb.fullname" . }}-service.{{.Values.school.Id}}.svc.cluster.local:{{ .Values.database.port }}/
+          value: mongodb://{{ template "mongodb.fullname" . }}-service.{{.Values.school.Id}}.svc.cluster.local:{{ .Values.database.port }}
         ports:
         - containerPort: {{ .Values.server.httpPortPod }}
           name: http

@@ -1,0 +1,13 @@
+# Ansible/destroy-school-deployment
+- hosts: localhost
+  tasks:
+   - name: connecting to cluster
+     shell: gcloud container clusters get-credentials {{cluster_name}} --zone {{zone}} --project {{project}}
+   - name: deleting helm release
+     shell: helm delete {{schoolId}}
+   - name: Force Deleteing pods
+     shell: kubectl delete --all pods --namespace={{schoolId}} --grace-period=0 --force
+   - pause:
+      minutes: 1
+   - name: deleting gcp pd
+     shell: gcloud compute disks delete {{schoolId}} --zone={{zone}} -q

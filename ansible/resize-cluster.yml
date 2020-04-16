@@ -1,0 +1,7 @@
+# Ansible/resize-cluster.yaml
+- hosts: localhost
+  tasks:
+   - name: connecting to cluster
+     shell: gcloud container clusters get-credentials {{cluster_name}} --zone {{zone}} --project {{project}}
+   - name: resizing the cluster
+     shell: gcloud container clusters resize {{cluster_name}} --node-pool {{npname}} --num-nodes {{new_cluster_size}}
