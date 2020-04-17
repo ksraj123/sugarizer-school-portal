@@ -1,19 +1,65 @@
 <%- include('header') %>
+<style>
+	.requests-row{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	margin: 0 10px !important;
+	}
+
+	.requests-row h3{
+	margin-top: 0;
+	color: #555555;
+	}
+
+	.head{
+		border-bottom: solid black 2px;
+		margin-bottom: 10px;
+	}
+
+	.info{
+		margin-right: 20% !important;
+	}
+
+	button{
+		width: 100px;
+		border-radius: 5px;
+		border: none;
+	}
+</style>
 <div class="wrapper">
 	<%- include('includes/sidebar') %>
 	<div class="main-panel">
 	<%- include('includes/navbar') %>
 		<div class="content">
 			<div class="container-fluid">
+				<% for(var result of results) { %>
 				<div class="row">
 					<div class="col-md-12">
-						<div class="card" style="margin-top:0px;" id="top-contributor-chart-parent">
-							<div class="card-content">
-								<canvas onload="" width="400" height="250"></canvas>
+						<div class="card" style="margin-top:0px; font-size: 10px;" id="top-contributor-chart-parent">
+							<div class="card-content" style="display: flex;">
+								<div class="requests-row info">
+									<h3 class="head">School Name</h3>
+									<h3><%= result.schoolName %></h3>
+								</div>
+								<div class="requests-row info">
+									<h3 class="head">School Id</h3>
+									<h3><%= result.schoolId %></h3>
+								</div>
+								<div class="requests-row">
+									<form action="/superadminconsole/requests" method="post">
+										<button name="approve" value="<%= result.schoolId %>" style="margin-bottom: 20px;"><h3>Approve</h3></button>
+									</form>
+									<form action="/superadminconsole/requests" method="post">
+										<button name="decline" value="<%= result.schoolId %>"><h3>Decline</h3></button>
+									</form>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
+				<% } %>
 				</div>
 			</div>
 		</div>

@@ -1,34 +1,46 @@
-const MongoClient = require("mongodb").MongoClient;
-const ObjectID = require("mongodb").ObjectID;
-const dbname = "crud_mongodb";
-const url = "mongodb://localhost:27017";
-const mongoOptions = {useNewUrlParser: true, useUnifiedTopology: true};
+// Handle to wait for db connection
+var mongo = require('mongodb');
 
-const state = {
-    db: null
+const databaseName = 'sugarizerDb';
+
+//- Utility functions
+
+// Init database
+exports.waitConnection = function(callback) {
+	var waitTime = 5;
+	if (waitTime) {
+		var timer = setInterval(function() {
+
+			var client = createConnection();
+
+			// Open the db
+			client.connect(function(err, client) {
+				if (!err) {
+                    clearInterval(timer);
+                    var db = client.db(databaseName);
+					callback(db);
+				} else {
+					console.log("Waiting for DB... ("+err.name+")");
+				}
+			});
+		}, waitTime*1000);
+	} else {
+		var client = createConnection();
+
+		// Open the db
+		client.connect(function(err, client) {
+			if (!err) {
+                var db = client.db(databaseName);
+				callback(db);
+			} else {
+				callback();
+			}
+		});
+	}
 };
 
-const connect = (cb) => {
-    if(state.db)
-        cb();
-    else{
-        MongoClient.connect(url, mongoOptions, (err, client)=>{
-            if(err)
-                cb(err);
-            else{
-                state.db = client.db(dbname);
-                cb();
-            }
-        })
-    }
+function createConnection() {
+	return new mongo.MongoClient(
+		(process.env.MONGO_URL || 'mongodb://localhost:27017')+'/'+ databaseName,
+		{auto_reconnect: false, w:1, useNewUrlParser: true, useUnifiedTopology: true });
 }
-
-const getPrimaryKey = (_id)=>{
-    return ObjectID(_id);
-}
-
-const getDB = () => {
-    return state.db;
-}
-
-module.exports = {getDB, connect, getPrimaryKey}
