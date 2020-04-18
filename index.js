@@ -78,8 +78,15 @@ app.get('/superadminconsole/login', (req, res)=>{
 });
 
 app.get('/superadminconsole/deployments', (req, res)=>{
-    res.render('deployments', {
-        module: 'Deployments'
+    database.collection('requests').find().toArray(function(err, result){
+        if (err){
+            console.log(err);
+        }
+        console.log(result);
+        res.render('deployments', {
+            module: 'Deployments',
+            results: result,
+        })
     })
 })
 
@@ -111,7 +118,22 @@ app.get('/superadminconsole/requests', (req, res)=>{
 
 app.post('/superadminconsole/requests', (req, res)=>{
     if (req.body.approve){
-        res.send(`request approved!!! ${req.body.approve}`);
+        var school_Id = req.body.approve;
+        database.collection('requests').updateOne({schoolId: req.body.approve}, {$set: {status: 0}}, function(err, result){
+            if (err){
+                console.log(err);
+            }
+            createNewDeployment(
+                {name: 'test-auth-cluster'},
+                {Id: school_Id},
+                {
+                    project_Id: 'auth-testing-272315',
+                    zone: 'asia-northeast1-a'
+                },
+                database,
+                school_Id
+            );
+        });
     }
     
     if (req.body.decline){
@@ -119,24 +141,24 @@ app.post('/superadminconsole/requests', (req, res)=>{
             if (err){
                 console.log(err);
             }
-            res.redirect('/superadminconsole/requests');
         })
     }
-
-    console.log(req.body);
+    res.redirect('/superadminconsole/requests');
 });
+
+app.post('/superadminconsole/destroyDeployment', function(req, res){
+    
+})
 
 // End of Super Admin Console routes
 // ================
 
-app.get('/getTodos', (req, res)=>{
-    db.getDB().collection(collection).find({}).toArray((err, documents)=>{
-        if (err)
+app.get('/deleteFromDb/:id', function(req, res){
+    database.collection('requests').findOneAndDelete({schoolId: req.params.id}, function(err, r){
+        if (err){
             console.log(err);
-        else{
-            console.log(documents);
-            res.json(documents);
         }
+        res.send(`${req.params.id} deleted from database!`);
     })
 })
 

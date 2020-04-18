@@ -1,19 +1,76 @@
 <%- include('header') %>
+<style>
+	.requests-row{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	margin: 0 10px !important;
+	}
+
+	.requests-row h3{
+	margin-top: 0;
+	color: #555555;
+	}
+
+	.head{
+		border-bottom: solid black 2px;
+		margin-bottom: 10px;
+	}
+
+	button{
+		width: 100px;
+		border-radius: 5px;
+		border: none;
+	}
+</style>
 <div class="wrapper">
 	<%- include('includes/sidebar') %>
 	<div class="main-panel">
 	<%- include('includes/navbar') %>
 		<div class="content">
 			<div class="container-fluid">
-				<div class="row">
-					<div class="col-md-12">
-						<div class="card" style="margin-top:0px;" id="top-contributor-chart-parent">
-							<div class="card-content">
-								<canvas onload="" width="400" height="250"></canvas>
+					<% for(var result of results) { %>
+					<% if(result.status !== 1) continue; %>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="card" style="margin-top:0px; font-size: 10px; padding: 0 60px;" id="top-contributor-chart-parent">
+								<div class="card-content" style="display: flex; justify-content: space-between;">
+									<div style="display: flex; width: 65%; justify-content: space-between;">
+										<div class="requests-row info">
+											<h3 class="head">School Name</h3>
+											<h3><%= result.schoolName %></h3>
+										</div>
+										<div class="requests-row info">
+											<h3 class="head">School Id</h3>
+											<h3><%= result.schoolId %></h3>
+										</div>
+										<div class="requests-row info">
+											<h3 class="head">External IP</h3>
+											<h3><%= result.externalIp %></h3>
+										</div>
+										<div class="requests-row info">
+											<h3 class="head">Replica Count</h3>
+											<h3><%= result.externalIp %></h3>
+										</div>
+									</div>
+
+									<div class="requests-row">
+										<form action="/superadminconsole/requests" method="post">
+											<button name="approve" value="<%= result.schoolId %>" style="margin-bottom: 20px;"><h3>Scale</h3></button>
+										</form>
+									</div>
+
+									<div class="requests-row">
+										<form action="/superadminconsole/destroyDeployment" method="post">
+											<button name="destroy" value="<%= result.schoolId %>" style="margin-bottom: 20px;"><h3>Destroy</h3></button>
+										</form>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
+					<% } %>
 				</div>
 			</div>
 		</div>

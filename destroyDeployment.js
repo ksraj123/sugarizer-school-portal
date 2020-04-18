@@ -2,7 +2,7 @@
 
 var Ansible = require('node-ansible');
 
-module.exports = function createNewDeployment (cluster, school, project, database, school_id){
+module.exports = function destroyDeployment (cluster, school, project, database, school_id){
     var config = {
         project: process.env.PROJECT_ID || project.project_Id,
         zone: process.env.PROJECT_ZONE || project.zone,
@@ -11,7 +11,7 @@ module.exports = function createNewDeployment (cluster, school, project, databas
     }
     var database = database;
     var school_id = school_id;
-    var command = new Ansible.Playbook().playbook('./ansible/new-school-deployment').variables(config);
+    var command = new Ansible.Playbook().playbook('./ansible/destroy-school-deployment.yml').variables(config);
     var promise = command.exec();
     promise.then(function(result){
         // playbook sucessfully finished execution

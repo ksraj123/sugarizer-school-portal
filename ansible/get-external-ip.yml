@@ -1,5 +1,7 @@
 - hosts: localhost
   tasks:
+   - pause:
+      minutes: 2
    - name: connecting to cluster
      shell: gcloud container clusters get-credentials {{cluster_name}} --zone {{zone}} --project {{project}}
    - name: scaling the deployment
