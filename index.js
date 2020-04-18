@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 var Ansible = require('node-ansible');
 var createNewDeployment = require('./createNewDeployment');
+var destroyDeployment = require('./destroyDeployment');
 var getExternalIp = require('./getExternalIp');
 const app = express();
 const path = require('path');
@@ -147,7 +148,18 @@ app.post('/superadminconsole/requests', (req, res)=>{
 });
 
 app.post('/superadminconsole/destroyDeployment', function(req, res){
-    
+    var school_Id = req.body.destroy;
+    destroyDeployment(
+        {name: 'test-auth-cluster'},
+        {Id: school_Id},
+        {
+            project_Id: 'auth-testing-272315',
+            zone: 'asia-northeast1-a'
+        },
+        database,
+        school_Id
+    );
+    res.redirect('/superadminconsole/deployments');
 })
 
 // End of Super Admin Console routes
@@ -160,6 +172,15 @@ app.get('/deleteFromDb/:id', function(req, res){
         }
         res.send(`${req.params.id} deleted from database!`);
     })
+})
+
+app.get('/domything', function(req, res){
+    database.collection('requests').updateOne({schoolId: 'check'}, {$set: {status: 1}}, 
+        function(err, result){
+            if (err){
+                console.log(err);
+            }});
+    res.send('done!');
 })
 
 app.get('/addNewDep', (req, res)=>{
