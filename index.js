@@ -50,7 +50,7 @@ app.post('/schoolconsole/request', (req, res)=>{
 
         database.collection('requests').insertOne({
             schoolName: req.body.schoolName,
-            schoolId: req.body.schoolId,
+            schoolId: req.body.schoolId.toLowerCase(),
             other: req.body.other,
             status: -1
         }, function(err, r){
@@ -71,7 +71,7 @@ app.post('/schoolconsole/request', (req, res)=>{
 // Super Admin Console routes
 
 app.get('/superadminconsole', (req, res)=>{
-    res.redirect('/superadminconsole/login');
+    res.redirect('/superadminconsole/requests');
 });
 
 app.get('/superadminconsole/login', (req, res)=>{
@@ -102,19 +102,6 @@ app.get('/superadminconsole/requests', (req, res)=>{
             module: 'Requests'
         });
     })
-    // var command = new Ansible.Playbook().playbook('../sugarizer-school-portal-ansible/sugarizer-school-portal-ansible/create-new-cluster');
-    // var promise = command.exec();
-    // promise.then(function(result) {
-    //     console.log(result.output);
-    //     console.log(result.code);
-    //     console.log(result);
-    // }).catch(err => {
-    //     console.log(err);
-    // })
-
-    // res.render('requests', {
-    //     module: 'Requests'
-    // })
 })
 
 app.post('/superadminconsole/requests', (req, res)=>{
@@ -165,46 +152,14 @@ app.post('/superadminconsole/destroyDeployment', function(req, res){
 // End of Super Admin Console routes
 // ================
 
-app.get('/deleteFromDb/:id', function(req, res){
-    database.collection('requests').findOneAndDelete({schoolId: req.params.id}, function(err, r){
-        if (err){
-            console.log(err);
-        }
-        res.send(`${req.params.id} deleted from database!`);
-    })
-})
-
-app.get('/domything', function(req, res){
-    database.collection('requests').updateOne({schoolId: 'check'}, {$set: {status: 1}}, 
-        function(err, result){
-            if (err){
-                console.log(err);
-            }});
-    res.send('done!');
-})
-
-app.get('/addNewDep', (req, res)=>{
-    createNewDeployment(
-        {name: 'test-auth-cluster'},
-        {Id: 'node-university'},
-        {
-            project_Id: 'auth-testing-272315',
-            zone: 'asia-northeast1-a'
-        });
-    res.send('<h1>NEW will be added soon</h1>');
-})
-
-app.get('/getExternal', (req, res)=>{
-    getExternalIp(
-        {name: 'test-auth-cluster'},
-        {Id: 'node-university'},
-        {
-            project_Id: 'auth-testing-272315',
-            zone: 'asia-northeast1-a'
-        }
-    );
-    res.send('<h1>will get external</h1>')
-})
+// app.get('/domything', function(req, res){
+//     database.collection('requests').deleteOne({schoolName: 'tes'}, 
+//         function(err, result){
+//             if (err){
+//                 console.log(err);
+//             }});
+//     res.send('done!');
+// })
 
 app.listen(8080, ()=>{
     console.log("connected to db, app listening on port 3000");

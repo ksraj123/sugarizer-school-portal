@@ -1,5 +1,13 @@
 <%- include('header') %>
 
+<script>
+function lowerAlphaOnly(event){
+  var key = event.keyCode;
+  console.log(key);
+  return ((key >= 65 && key <= 90)|| key==8);
+}
+</script>
+
 <nav class="navbar navbar-transparent navbar-absolute">
   <div class="container-fluid">
   </div>
@@ -19,7 +27,9 @@
                     <span class="material-input"></span>
                 </div>
                 <div class="form-group form-black label-floating is-empty">
-                    <input class="form-control" name="schoolId" type="password" placeholder="School Id" required>
+                    <input class="form-control" name="schoolId" type="text" 
+                      placeholder="School Id - alphabets only" 
+                      required onkeydown="return lowerAlphaOnly(event);">
 					          <input id="formlang" type="hidden" name="lang">
                     <span class="material-input"></span>
                 </div>
