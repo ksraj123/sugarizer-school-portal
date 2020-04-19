@@ -1,4 +1,15 @@
-Sugarizer School Portal application
+Sugarizer School Portal application can be divided into two parts
+- Super admin console
+- School console
+
+**Super Admin Console**
+![](./docs/images/deploymentsPage.png)
+
+![](./docs/images/requests.png)
+
+**School console**
+
+![](./docs/images/schoolconsole.png)
 
 Phase 1 - Basic working application, no authentication, deployment requests saved to databased and accessed upon
     refreshing in the super admin console
