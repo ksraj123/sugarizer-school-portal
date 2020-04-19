@@ -161,6 +161,15 @@ app.post('/superadminconsole/destroyDeployment', function(req, res){
 //     res.send('done!');
 // })
 
+app.get('/deleteFromDb/:id', function(req, res){
+    database.collection('requests').findOneAndDelete({schoolId: req.params.id}, function(err, r){
+        if (err){
+            console.log(err);
+        }
+        res.send(`${req.params.id} deleted from database!`);
+    })
+})
+
 app.listen(8080, ()=>{
     console.log("connected to db, app listening on port 3000");
 })
