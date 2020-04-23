@@ -12,6 +12,8 @@ Sugarizer School Portal application can be divided into two parts
 - When the request is approved go to deployments page to get the external ip, if the deployment is not accessible immideately on the external ip then wait for a while, it may take some time (upto 20 mins) for it to become accessible.
 - You can login into the dashboard of the sugarizer deployment with a default account created for each deployment whose `userid = defaultuser` and `password = password`
 
+Here is a link to a [video walkthrough demostrating the working of the demo application](https://www.youtube.com/watch?v=CzCGf16DbzE&feature=youtu.be)
+
 **Features implemented till now** of Sugarizer School Portal -
 - New deployment can be requested through the school console
 - Deployment requests can be either approved or denied on the **Requests page** of super admin console
